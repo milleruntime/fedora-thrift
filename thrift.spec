@@ -1,6 +1,6 @@
 %global pkg_version 0.9.1
 %global fb303_version 1.0.0_dev
-%global pkg_rel 7
+%global pkg_rel 8
 
 %global py_version 2.7
 
@@ -109,7 +109,9 @@ BuildRequires:	openssl-devel
 BuildRequires:	zlib-devel
 BuildRequires:	bison-devel
 BuildRequires:	flex-devel
+%ifarch %{mono_arches}
 BuildRequires:	mono-devel
+%endif
 BuildRequires:	glib2-devel
 BuildRequires:	texlive
 BuildRequires:	qt-devel
@@ -129,7 +131,9 @@ Requires:	openssl
 Requires:	boost
 Requires:	bison
 Requires:	flex
+%ifarch %{mono_arches}
 Requires:	mono-core
+%endif
 
 Requires:	qt4
 
@@ -536,6 +540,8 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 
 
 %changelog
+* Wed Oct 16 2013 Dan Horák <dan[at]danny.cz> - 0.9.1-8
+- Mono available only on selected arches
 
 * Sun Oct 13 2013 willb <willb@redhat> - 0.9.1-7
 - minor specfile cleanups
