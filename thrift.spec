@@ -1,6 +1,6 @@
 %global pkg_version 0.9.1
 %global fb303_version 1.0.0_dev
-%global pkg_rel 10
+%global pkg_rel 11
 
 %global py_version 2.7
 
@@ -234,7 +234,7 @@ BuildRequires:	log4j
 BuildRequires:	slf4j
 BuildRequires:	tomcat-servlet-3.0-api
 
-Requires:	java >= 1:1.6.0
+Requires:	java-headless >= 1:1.6.0
 Requires:	javapackages-tools
 Requires:	mvn(org.slf4j:slf4j-api)
 Requires:	mvn(commons-lang:commons-lang)
@@ -537,6 +537,9 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 
 
 %changelog
+
+* Fri Feb 21 2014 willb <willb@redhat> - 0.9.1-11
+- fix BZ 1068561
 
 * Fri Dec 20 2013 willb <willb@redhat> - 0.9.1-10
 - fix BZ 1045544
