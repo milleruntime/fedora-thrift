@@ -70,7 +70,7 @@
 
 Name:		thrift
 Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}
+Release:	%{pkg_rel}%{?dist}.1
 Summary:	Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
@@ -547,6 +547,9 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 
 
 %changelog
+* Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 0.9.1-12.1
+- Rebuild for boost 1.55.0
+
 * Mon May 05 2014 Lubomir Rintel <lkundrak@v3.sk> - 0.9.1-12
 - Fix EPEL build
 
