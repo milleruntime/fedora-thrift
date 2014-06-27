@@ -1,6 +1,6 @@
 %global pkg_version 0.9.1
 %global fb303_version 1.0.0_dev
-%global pkg_rel 12
+%global pkg_rel 13
 
 %global py_version 2.7
 
@@ -70,7 +70,7 @@
 
 Name:		thrift
 Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}.2
+Release:	%{pkg_rel}%{?dist}
 Summary:	Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
@@ -517,10 +517,7 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %{_javadocdir}/%{name}
 %doc LICENSE NOTICE
 
-%files -n lib%{name}-java
-%{_javadir}/lib%{name}.jar
-%{_mavenpomdir}/JPP-lib%{name}.pom
-%{_mavendepmapfragdir}/%{name}
+%files -n lib%{name}-java -f .mfiles
 %doc LICENSE NOTICE
 
 %files -n fb303
@@ -538,15 +535,15 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %{python_sitelib}/%{name}_fb303-%{fb303_version}-py%{py_version}.egg-info
 %doc LICENSE NOTICE
 
-%files -n fb303-java
-%{_javadir}/libfb303.jar
-%{_mavenpomdir}/JPP-libfb303.pom
-%{_mavendepmapfragdir}/thrift-fb303
+%files -n fb303-java -f .mfiles-fb303
 %doc LICENSE NOTICE
 
 
 
 %changelog
+* Fri Jun 27 2014 Petr Pisar <ppisar@redhat.com> - 0.9.1-13
+- Use add_maven_depmap-generated file lists (bug #1107448)
+
 * Sun Jun 08 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.1-12.2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
