@@ -1,6 +1,6 @@
 %global pkg_version 0.9.1
 %global fb303_version 1.0.0_dev
-%global pkg_rel 14
+%global pkg_rel 15
 
 %global py_version 2.7
 
@@ -11,8 +11,8 @@
 
 %global have_mongrel 0
 
-%if 0%{?fedora} >= 19
-# erlang-jsx is available in F19
+%if 0%{?fedora} >= 19 && 0%{?fedora} < 21
+# erlang-jsx is available in F19 but orphaned in F22
 %global have_jsx 1
 %else
 %global have_jsx 0
@@ -545,6 +545,10 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+
+* Mon Apr 20 2015 Will Benton <willb@redhat.com> - 0.9.1-15
+- Dropped Erlang support for F22 and above, since erlang-jsx is orphaned
+
 * Wed Apr  8 2015 Haïkel Guémar <hguemar@fedoraproject.org> - 0.9.1-14
 - Split Qt4/GLib runtimes into separate subpackages
 - Drop mono support, it's broken and not even shipped (and it pulls mono-core)
