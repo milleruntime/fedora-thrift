@@ -1,6 +1,6 @@
 %global pkg_version 0.9.1
-%global fb303_version 1.0.0_dev
-%global pkg_rel 15
+%global fb303_version 1.0.0.dev0
+%global pkg_rel 16
 
 %global py_version 2.7
 
@@ -240,7 +240,7 @@ BuildRequires:	httpcomponents-core
 BuildRequires:	junit
 BuildRequires:	log4j
 BuildRequires:	slf4j
-BuildRequires:	tomcat-servlet-3.0-api
+BuildRequires:	tomcat-servlet-3.1-api
 
 Requires:	java-headless >= 1:1.6.0
 Requires:	javapackages-tools
@@ -545,6 +545,8 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+* Fri Apr 24 2015 Michal Srb <msrb@redhat.com> - 0.9.1-16
+- Fix FTBFS (Resolves: rhbz#1195364)
 
 * Mon Apr 20 2015 Will Benton <willb@redhat.com> - 0.9.1-15
 - Dropped Erlang support for F22 and above, since erlang-jsx is orphaned
