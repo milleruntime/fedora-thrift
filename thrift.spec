@@ -60,7 +60,7 @@
 
 Name:		thrift
 Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}.5
+Release:	%{pkg_rel}%{?dist}.6
 Summary:	Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
@@ -94,6 +94,8 @@ Patch0:		thrift-0.9.1-buildxml.patch
 Patch1:		thrift-0.9.1-rebar.patch
 # for fb303, excise maven ant tasks; build against system libraries; etc.
 Patch2:		fb303-0.9.1-buildxml.patch
+# required to get it build on aarch64
+Patch3:         thrift-0.9.1-THRIFT-2214-System-header-sys-param.h-is-included-in.patch
 
 Group:		Development/Libraries
 
@@ -321,6 +323,7 @@ The fb303-java package contains Java bindings for fb303.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %{?!el5:sed -i -e 's/^AC_PROG_LIBTOOL/LT_INIT/g' configure.ac}
 
@@ -545,6 +548,9 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+* Wed Oct 21 2015 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 0.9.1-16.6
+- Backport THRIFT-2214 fix to get package built on aarch64.
+
 * Thu Aug 27 2015 Jonathan Wakely <jwakely@redhat.com> - 0.9.1-16.5
 - Rebuilt for Boost 1.59
 

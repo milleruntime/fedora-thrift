@@ -1,0 +1,39 @@
+From f4e6e62ea091b94322ecc99756269dbee1c06380 Mon Sep 17 00:00:00 2001
+From: Ben Craig <bencraig@apache.org>
+Date: Tue, 5 Nov 2013 19:49:12 -0600
+Subject: [PATCH 081/223] THRIFT-2214: System header sys/param.h is included
+ inside the Thrift namespace Client: cpp Patch: Vladimir Strisovsky
+
+---
+ lib/cpp/src/thrift/protocol/TProtocol.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/lib/cpp/src/thrift/protocol/TProtocol.h b/lib/cpp/src/thrift/protocol/TProtocol.h
+index d6ecc0f..e72033a 100644
+--- a/lib/cpp/src/thrift/protocol/TProtocol.h
++++ b/lib/cpp/src/thrift/protocol/TProtocol.h
+@@ -75,10 +75,6 @@ static inline To bitwise_cast(From from) {
+ }
+ 
+ 
+-namespace apache { namespace thrift { namespace protocol {
+-
+-using apache::thrift::transport::TTransport;
+-
+ #ifdef HAVE_SYS_PARAM_H
+ #include <sys/param.h>
+ #endif
+@@ -140,6 +136,10 @@ using apache::thrift::transport::TTransport;
+ # error "Can't define htonll or ntohll!"
+ #endif
+ 
++namespace apache { namespace thrift { namespace protocol {
++
++using apache::thrift::transport::TTransport;
++
+ /**
+  * Enumerated definition of the types that the Thrift protocol supports.
+  * Take special note of the T_END type which is used specifically to mark
+-- 
+2.6.1
+
