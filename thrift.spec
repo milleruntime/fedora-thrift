@@ -1,6 +1,6 @@
 %global pkg_version 0.9.1
 %global fb303_version 1.0.0_dev
-%global pkg_rel 12
+%global pkg_rel 13
 
 %global py_version 2.7
 
@@ -104,6 +104,8 @@ Patch0:		thrift-0.9.1-buildxml.patch
 Patch1:		thrift-0.9.1-rebar.patch
 # for fb303, excise maven ant tasks; build against system libraries; etc.
 Patch2:		fb303-0.9.1-buildxml.patch
+# required to get it build on aarch64
+Patch3:         thrift-0.9.1-THRIFT-2214-System-header-sys-param.h-is-included-in.patch
 
 Group:		Development/Libraries
 
@@ -323,6 +325,7 @@ The fb303-java package contains Java bindings for fb303.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %{?!el5:sed -i -e 's/^AC_PROG_LIBTOOL/LT_INIT/g' configure.ac}
 
@@ -544,9 +547,10 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %{_mavendepmapfragdir}/thrift-fb303
 %doc LICENSE NOTICE
 
-
-
 %changelog
+* Wed Oct 21 2015 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 0.9.1-13
+- Backport THRIFT-2214 fix to get package built on aarch64.
+
 * Mon May 05 2014 Lubomir Rintel <lkundrak@v3.sk> - 0.9.1-12
 - Fix EPEL build
 
