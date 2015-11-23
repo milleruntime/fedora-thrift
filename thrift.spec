@@ -1,6 +1,6 @@
 %global pkg_version 0.9.1
 %global fb303_version 1.0.0.dev0
-%global pkg_rel 16
+%global pkg_rel 17
 
 %global py_version 2.7
 
@@ -60,7 +60,7 @@
 
 Name:		thrift
 Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}.6
+Release:	%{pkg_rel}%{?dist}
 Summary:	Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
@@ -548,6 +548,9 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+* Mon Nov 23 2015 Peter Robinson <pbrobinson@fedoraproject.org> 0.9.1-17
+- Fix release
+
 * Wed Oct 21 2015 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 0.9.1-16.6
 - Backport THRIFT-2214 fix to get package built on aarch64.
 
