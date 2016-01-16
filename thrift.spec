@@ -60,7 +60,7 @@
 
 Name:		thrift
 Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}
+Release:	%{pkg_rel}%{?dist}.1
 Summary:	Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
@@ -548,6 +548,9 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+* Sat Jan 16 2016 Jonathan Wakely <jwakely@redhat.com> - 0.9.1-17.1
+- Rebuilt for Boost 1.60
+
 * Mon Nov 23 2015 Peter Robinson <pbrobinson@fedoraproject.org> 0.9.1-17
 - Fix release
 
