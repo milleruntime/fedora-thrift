@@ -60,7 +60,7 @@
 
 Name:		thrift
 Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}.1
+Release:	%{pkg_rel}%{?dist}.2
 Summary:	Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
@@ -548,6 +548,9 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+* Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.1-17.2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Sat Jan 16 2016 Jonathan Wakely <jwakely@redhat.com> - 0.9.1-17.1
 - Rebuilt for Boost 1.60
 
