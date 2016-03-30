@@ -60,7 +60,7 @@
 
 Name:		thrift
 Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}.2
+Release:	%{pkg_rel}%{?dist}.3
 Summary:	Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
@@ -96,6 +96,8 @@ Patch1:		thrift-0.9.1-rebar.patch
 Patch2:		fb303-0.9.1-buildxml.patch
 # required to get it build on aarch64
 Patch3:         thrift-0.9.1-THRIFT-2214-System-header-sys-param.h-is-included-in.patch
+# Adapt to GCC 6, bug #1306671, in 0.9.3
+Patch4:     thrift-0.9.1-Adapt-to-GCC-6.patch
 
 Group:		Development/Libraries
 
@@ -324,6 +326,7 @@ The fb303-java package contains Java bindings for fb303.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %{?!el5:sed -i -e 's/^AC_PROG_LIBTOOL/LT_INIT/g' configure.ac}
 
@@ -548,6 +551,9 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+* Wed Mar 30 2016 Petr Pisar <ppisar@redhat.com> - 0.9.1-17.3
+- Adapt to GCC 6 (bug #1306671)
+
 * Fri Feb 05 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.1-17.2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
