@@ -60,7 +60,7 @@
 
 Name:		thrift
 Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}.3
+Release:	%{pkg_rel}%{?dist}.4
 Summary:	Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
@@ -551,6 +551,9 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+* Tue May 17 2016 Jitka Plesnikova <jplesnik@redhat.com> - 0.9.1-17.4
+- Perl 5.24 rebuild
+
 * Wed Mar 30 2016 Petr Pisar <ppisar@redhat.com> - 0.9.1-17.3
 - Adapt to GCC 6 (bug #1306671)
 
