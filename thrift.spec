@@ -177,6 +177,7 @@ The python-%{name} package contains Python bindings for %{name}.
 %package -n	perl-%{name}
 Summary:	Perl support for %{name}
 Provides:	perl(Thrift) = %{version}-%{release}
+BuildRequires:	perl-generators
 BuildRequires:	perl(Bit::Vector)
 BuildRequires:	perl(ExtUtils::MakeMaker)
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
