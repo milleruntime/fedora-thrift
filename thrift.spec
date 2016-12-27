@@ -1,6 +1,6 @@
 %global pkg_version 0.9.1
 %global fb303_version 1.0.0_dev
-%global pkg_rel 13
+%global pkg_rel 14
 
 %global py_version 2.7
 
@@ -11,12 +11,7 @@
 
 %global have_mongrel 0
 
-%if 0%{?fedora} >= 19
-# erlang-jsx is available in F19
-%global have_jsx 1
-%else
 %global have_jsx 0
-%endif
 
 # We should be able to enable this in the future
 %global want_d 0
@@ -54,15 +49,7 @@
 %global php_configure --with-php
 %endif
 
-%if 0%{?rhel}
 %global want_mono 0
-%else
-%ifarch %{mono_arches}
-%global want_mono 1
-%else
-%global want_mono 0
-%endif
-%endif
 
 # Thrift's GO support doesn't build under Fedora
 %global want_golang 0
@@ -121,9 +108,6 @@ BuildRequires:	openssl-devel
 BuildRequires:	zlib-devel
 BuildRequires:	bison-devel
 BuildRequires:	flex-devel
-%if %{want_mono}
-BuildRequires:	mono-devel
-%endif
 BuildRequires:	glib2-devel
 BuildRequires:	texlive
 BuildRequires:	qt-devel
@@ -164,6 +148,21 @@ Requires:	boost-devel
 %description	devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
+
+%package        qt
+Summary:        Qt support for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    qt
+The %{name}-qt package contains Qt bindings for %{name}.
+
+%package        glib
+Summary:        GLib support for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    glib
+The %{name}-qt package contains GLib bindings for %{name}.
+
 
 %package -n	python-%{name}
 Summary:	Python support for %{name}
@@ -476,9 +475,17 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %files
 %doc LICENSE NOTICE
 %{_bindir}/thrift
-%{_libdir}/*.so.*
-%{_libdir}/lib*-%{version}.so
+%{_libdir}/libthrift-%{version}.so
+%{_libdir}/libthriftz-%{version}.so
 %{_mandir}/man1/thrift.1.gz
+
+%files glib
+%{_libdir}/libthrift_c_glib.so
+%{_libdir}/libthrift_c_glib.so.*
+
+%files qt
+%{_libdir}/libthriftqt.so
+%{_libdir}/libthriftqt-%{version}.so
 
 %files devel
 %{_includedir}/thrift
@@ -548,6 +555,10 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %doc LICENSE NOTICE
 
 %changelog
+* Tue Dec 27 2016 William Benton <willb@redhat.com> - 0.9.1-13
+- Backport QT/Glib separation from master
+- fix BZ 1390992
+
 * Wed Oct 21 2015 Marcin Juszkiewicz <mjuszkiewicz@redhat.com> - 0.9.1-13
 - Backport THRIFT-2214 fix to get package built on aarch64.
 
