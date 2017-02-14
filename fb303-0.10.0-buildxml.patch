@@ -12,15 +12,6 @@ index 8f2fa51..d89f05e 100755
  
    <!-- project wide settings. All directories relative to basedir -->
    <property name="thrift.root" location="${basedir}/../../../"/>
-@@ -26,7 +25,7 @@
-   <property name="interface.dir" value="${basedir}/../if"/>
-   <property name="thrift.java.dir" location="${thrift.root}/lib/java"/>
-   <property name="build.tools.dir" location="${thrift.java.dir}/build/tools/"/>
--  <property name="thrift_compiler" value="${thrift.root}/compiler/cpp/thrift"/> 
-+  <property name="thrift_compiler" value="${thrift.root}/compiler/cpp/thrift"/>
- 
-   <!-- inherit from the java build file for version and other properties -->
-   <property file="${thrift.java.dir}/build.properties" />
 @@ -38,8 +37,8 @@
    </condition>
    <property name="version" value="${thrift.version}-snapshot"/>

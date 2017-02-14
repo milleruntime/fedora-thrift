@@ -1,6 +1,4 @@
-%global pkg_version 0.9.1
 %global fb303_version 1.0.0.dev0
-%global pkg_rel 17
 
 %global py_version 2.7
 
@@ -11,12 +9,8 @@
 
 %global have_mongrel 0
 
-%if 0%{?fedora} >= 19 && 0%{?fedora} < 21
 # erlang-jsx is available in F19 but orphaned in F22
-%global have_jsx 1
-%else
 %global have_jsx 0
-%endif
 
 # We should be able to enable this in the future
 %global want_d 0
@@ -58,80 +52,60 @@
 %global want_golang 0
 %global golang_configure --without-go
 
-Name:		thrift
-Version:	%{pkg_version}
-Release:	%{pkg_rel}%{?dist}.6
-Summary:	Software framework for cross-language services development
+Name:    thrift
+Version: 0.10.0
+Release: 1%{?dist}
+Summary: Software framework for cross-language services development
 
 # Parts of the source are used under the BSD and zlib licenses, but
 # these are OK for inclusion in an Apache 2.0-licensed whole:
-# http://www.apache.org/legal/3party.html
+# https://www.apache.org/legal/3party.html
 
 # Here's the breakdown:
-# thrift-0.9.1/lib/py/compat/win32/stdint.h is 2-clause BSD
-# thrift-0.9.1/compiler/cpp/src/md5.[ch] are zlib
-License:	ASL 2.0 and BSD and zlib
-URL:		http://thrift.apache.org/
+# ./lib/py/compat/win32/stdint.h is 2-clause BSD
+# ./compiler/cpp/src/md5.[ch] are zlib
+License: ASL 2.0 and BSD and zlib
+URL:     https://thrift.apache.org/
 
-%if "%{version}" != "0.9.1"
-Source0:	http://archive.apache.org/dist/%{name}/%{version}/%{name}-%{version}.tar.gz
-%else
-# Unfortunately, the distribution tarball for thrift-0.9.1 is broken, so we're
-# using an exported tarball from git.  This will change in the future.
+Source0: https://archive.apache.org/dist/%{name}/%{version}/%{name}-%{version}.tar.gz
 
-Source0:	https://github.com/apache/thrift/archive/0.9.1.tar.gz
-%endif
+Source1: https://repo1.maven.org/maven2/org/apache/thrift/lib%{name}/%{version}/lib%{name}-%{version}.pom
+Source2: https://raw.github.com/apache/%{name}/%{version}/bootstrap.sh
 
-Source1:	http://repo1.maven.org/maven2/org/apache/thrift/lib%{name}/%{version}/lib%{name}-%{version}.pom
-Source2:	https://raw.github.com/apache/%{name}/%{version}/bootstrap.sh
-
-Source3:        https://gitorious.org/pkg-scribe/thrift-deb-pkg/raw/master:debian/manpage.1.ex
-Source4:	http://repo1.maven.org/maven2/org/apache/thrift/libfb303/%{version}/libfb303-%{version}.pom
+Source3: https://gitorious.org/pkg-scribe/thrift-deb-pkg/raw/master:debian/manpage.1.ex
+Source4: https://repo1.maven.org/maven2/org/apache/thrift/libfb303/%{version}/libfb303-%{version}.pom
 
 # this patch is adapted from Gil Cattaneo's thrift-0.7.0 package
-Patch0:		thrift-0.9.1-buildxml.patch
-# don't use bundled rebar executable
-Patch1:		thrift-0.9.1-rebar.patch
+Patch0: %{name}-%{version}-buildxml.patch
 # for fb303, excise maven ant tasks; build against system libraries; etc.
-Patch2:		fb303-0.9.1-buildxml.patch
-# required to get it build on aarch64
-Patch3:         thrift-0.9.1-THRIFT-2214-System-header-sys-param.h-is-included-in.patch
-# Adapt to GCC 6, bug #1306671, in 0.9.3
-Patch4:     thrift-0.9.1-Adapt-to-GCC-6.patch
+Patch1: fb303-%{version}-buildxml.patch
+# fix configure.ac insistence on using /usr/local/lib for JAVA_PREFIX
+Patch2: configure-java-prefix.patch
 
-Group:		Development/Libraries
+Group: Development/Libraries
 
 # BuildRequires for language-specific bindings are listed under these
 # subpackages, to facilitate enabling or disabling individual language
 # bindings in the future
 
-BuildRequires:	libstdc++-devel
-BuildRequires:	boost-devel
-BuildRequires:	automake
-BuildRequires:	autoconf
-BuildRequires:	openssl-devel
-BuildRequires:	zlib-devel
-BuildRequires:	bison-devel
-BuildRequires:	flex-devel
-BuildRequires:	glib2-devel
-BuildRequires:	texlive
-BuildRequires:	qt-devel
-
-BuildRequires:	libtool
-BuildRequires:	autoconf
-BuildRequires:	automake
-
-BuildRequires:	bison
-BuildRequires:	flex
-BuildRequires:	bison-devel
-BuildRequires:	flex-devel
-
-BuildRequires:	ant
-
+BuildRequires: ant >= 1.7
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: bison
+BuildRequires: boost-devel
+BuildRequires: flex
+BuildRequires: flex-devel
+BuildRequires: glib2-devel
+BuildRequires: libstdc++-devel
+BuildRequires: libtool
+BuildRequires: openssl-devel
+BuildRequires: qt-devel
+BuildRequires: texlive
+BuildRequires: zlib-devel
 
 %if 0%{?want_golang} > 0
-BuildRequires:	golang
-Requires:	golang
+BuildRequires: golang
+Requires: golang
 %endif
 
 %description
@@ -141,13 +115,13 @@ development combines a software stack with a code generation engine to
 build services that work efficiently and seamlessly between C++, Java,
 Python, %{?php_langname}and other languages.
 
-%package	devel
-Summary:	Development files for %{name}
-Requires:	%{name}%{?_isa} = %{version}-%{release}
-Requires:	pkgconfig
-Requires:	boost-devel
+%package devel
+Summary: Development files for %{name}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: pkgconfig
+Requires: boost-devel
 
-%description	devel
+%description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
@@ -165,127 +139,128 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %description    glib
 The %{name}-qt package contains GLib bindings for %{name}.
 
-%package -n	python-%{name}
-Summary:	Python support for %{name}
-BuildRequires:	python2-devel
-Requires:	%{name}%{?_isa} = %{version}-%{release}
-Requires:	python2
+%package -n python-%{name}
+Summary: Python support for %{name}
+BuildRequires: python2-devel
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: python2
 
 %description -n python-%{name}
 The python-%{name} package contains Python bindings for %{name}.
 
-%package -n	perl-%{name}
-Summary:	Perl support for %{name}
-Provides:	perl(Thrift) = %{version}-%{release}
-BuildRequires:	perl-generators
-BuildRequires:	perl(Bit::Vector)
-BuildRequires:	perl(ExtUtils::MakeMaker)
-Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-Requires:	perl(Bit::Vector)
-Requires:	perl(Encode)
-Requires:	perl(HTTP::Request)
-Requires:	perl(IO::Select)
-Requires:	perl(IO::Socket::INET)
-Requires:	perl(IO::String)
-Requires:	perl(LWP::UserAgent)
-Requires:	perl(POSIX)
-Requires:	perl(base)
-Requires:	perl(constant)
-Requires:	perl(strict)
-Requires:	perl(utf8)
-Requires:	perl(warnings)
-BuildArch:	noarch
+%package -n perl-%{name}
+Summary: Perl support for %{name}
+Provides: perl(Thrift) = %{version}-%{release}
+BuildRequires: perl(Bit::Vector)
+BuildRequires: perl(Class::Accessor)
+BuildRequires: perl(ExtUtils::MakeMaker)
+BuildRequires: perl-generators
+Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
+Requires: perl(Bit::Vector)
+Requires: perl(Encode)
+Requires: perl(HTTP::Request)
+Requires: perl(IO::Select)
+Requires: perl(IO::Socket::INET)
+Requires: perl(IO::String)
+Requires: perl(LWP::UserAgent)
+Requires: perl(POSIX)
+Requires: perl(base)
+Requires: perl(constant)
+Requires: perl(strict)
+Requires: perl(utf8)
+Requires: perl(warnings)
+BuildArch: noarch
 
 %description -n perl-%{name}
 The perl-%{name} package contains Perl bindings for %{name}.
 
 %if %{?want_d}
-%package -n	d-%{name}
-Summary:	D support for %{name}
-BuildRequires:	ldc
+%package -n d-%{name}
+Summary: D support for %{name}
+BuildRequires: ldc
 
 %description -n d-%{name}
 The d-%{name} package contains D bindings for %{name}.
 %endif
 
 %if 0%{?want_php} != 0
-%package -n	php-%{name}
-Summary:	PHP support for %{name}
-Requires:	%{name}%{?_isa} = %{version}-%{release}
-Requires:	php(zend-abi) = %{php_zend_api}
-Requires:	php(api) = %{php_core_api}
-Requires:	php(language) >= 5.3.0
-Requires:	php-date
-Requires:	php-json
-BuildRequires:	php-devel
+%package -n php-%{name}
+Summary: PHP support for %{name}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: php(zend-abi) = %{php_zend_api}
+Requires: php(api) = %{php_core_api}
+Requires: php(language) >= 5.3.0
+Requires: php-date
+Requires: php-json
+BuildRequires: php-devel
 
 %description -n php-%{name}
 The php-%{name} package contains PHP bindings for %{name}.
 %endif
 
-%package -n	lib%{name}-javadoc
-Summary:	API documentation for java-%{name}
-Requires:	lib%{name}-java = %{version}-%{release}
-BuildArch:	noarch
+%package -n lib%{name}-javadoc
+Summary: API documentation for java-%{name}
+Requires: lib%{name}-java = %{version}-%{release}
+BuildArch: noarch
 
 %description -n lib%{name}-javadoc 
 The lib%{name}-javadoc package contains API documentation for the
 Java bindings for %{name}.
 
-%package -n	lib%{name}-java
-Summary:	Java support for %{name}
+%package -n lib%{name}-java
+Summary: Java support for %{name}
 
-BuildRequires:	java-devel
-BuildRequires:	javapackages-tools
-BuildRequires:	apache-commons-codec
-BuildRequires:	apache-commons-lang
-BuildRequires:	apache-commons-logging
-BuildRequires:	httpcomponents-client
-BuildRequires:	httpcomponents-core
-BuildRequires:	junit
-BuildRequires:	log4j
-BuildRequires:	slf4j
-BuildRequires:	tomcat-servlet-3.1-api
+BuildRequires: apache-commons-codec
+BuildRequires: apache-commons-lang
+BuildRequires: apache-commons-logging
+BuildRequires: httpcomponents-client
+BuildRequires: httpcomponents-core
+BuildRequires: java-devel
+BuildRequires: javapackages-tools
+BuildRequires: junit
+BuildRequires: log4j
+BuildRequires: slf4j
+BuildRequires: tomcat-servlet-3.1-api
 
-Requires:	java-headless >= 1:1.6.0
-Requires:	javapackages-tools
-Requires:	mvn(org.slf4j:slf4j-api)
-Requires:	mvn(commons-lang:commons-lang)
-Requires:	mvn(org.apache.httpcomponents:httpclient)
-Requires:	mvn(org.apache.httpcomponents:httpcore)
-BuildArch:	noarch
+Requires: java-headless >= 1:1.6.0
+Requires: javapackages-tools
+Requires: mvn(org.slf4j:slf4j-api)
+Requires: mvn(commons-lang:commons-lang)
+Requires: mvn(org.apache.httpcomponents:httpclient)
+Requires: mvn(org.apache.httpcomponents:httpcore)
+BuildArch: noarch
 
 
 %description -n lib%{name}-java
 The lib%{name}-java package contains Java bindings for %{name}.
 
 %if 0%{?want_ruby} > 0
-%package -n	ruby-%{name}
-Summary:	Ruby support for %{name}
-Requires:	%{name}%{?_isa} = %{version}-%{release}
-Requires:	ruby(release)
-BuildRequires:	ruby-devel
+%package -n ruby-%{name}
+Summary: Ruby support for %{name}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: ruby(release)
+BuildRequires: ruby-devel
 
 %description -n ruby-%{name}
 The ruby-%{name} package contains Ruby bindings for %{name}.
 %endif
 
 %if 0%{?want_erlang} > 0
-%package -n	erlang-%{name}
-Summary:	Erlang support for %{name}
-Requires:	%{name}%{?_isa} = %{version}-%{release}
-Requires:	erlang
-Requires:	erlang-jsx
-BuildRequires:	erlang
-BuildRequires:	erlang-rebar
+%package -n erlang-%{name}
+Summary: Erlang support for %{name}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: erlang
+Requires: erlang-jsx
+BuildRequires: erlang
+BuildRequires: erlang-rebar
 
 %description -n erlang-%{name}
 The erlang-%{name} package contains Erlang bindings for %{name}.
 %endif
 
 %package -n fb303
-Summary:	Basic interface for Thrift services
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Summary: Basic interface for Thrift services
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description -n fb303
 fb303 is the shared root of all Thrift services; it provides a
@@ -293,41 +268,36 @@ standard interface to monitoring, dynamic options and configuration,
 uptime reports, activity, etc.
 
 %package -n fb303-devel
-Summary:	Development files for fb303
-Requires:	fb303%{?_isa} = %{version}-%{release}
+Summary: Development files for fb303
+Requires: fb303%{?_isa} = %{version}-%{release}
 
 %description -n fb303-devel
 The fb303-devel package contains header files for fb303
 
 %package -n python-fb303
-Summary:	Python bindings for fb303
-Requires:	fb303%{?_isa} = %{version}-%{release}
-BuildRequires:	python2-devel
+Summary: Python bindings for fb303
+Requires: fb303%{?_isa} = %{version}-%{release}
+BuildRequires: python2-devel
 
 %description -n python-fb303
 The python-fb303 package contains Python bindings for fb303.
 
 %package -n fb303-java
-Summary:	Java bindings for fb303
-Requires:	java >= 1:1.6.0
-Requires:	javapackages-tools
-Requires:	mvn(org.slf4j:slf4j-api)
-Requires:	mvn(commons-lang:commons-lang)
-Requires:	mvn(org.apache.httpcomponents:httpclient)
-Requires:	mvn(org.apache.httpcomponents:httpcore)
-BuildArch:	noarch
+Summary: Java bindings for fb303
+Requires: java >= 1:1.6.0
+Requires: javapackages-tools
+Requires: mvn(org.slf4j:slf4j-api)
+Requires: mvn(commons-lang:commons-lang)
+Requires: mvn(org.apache.httpcomponents:httpclient)
+Requires: mvn(org.apache.httpcomponents:httpcore)
+BuildArch: noarch
 
 %description -n fb303-java
 The fb303-java package contains Java bindings for fb303.
 
 %global _default_patch_fuzz 2
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+%autosetup -p1
 
 %{?!el5:sed -i -e 's/^AC_PROG_LIBTOOL/LT_INIT/g' configure.ac}
 
@@ -346,6 +316,9 @@ echo 'EXTRA_libthriftz_la_DEPENDENCIES = libthrift.la' >> lib/cpp/Makefile.am
 # echo 'libfb303_so_LIBADD = -lthrift -L../../../lib/cpp/.libs' >> contrib/fb303/cpp/Makefile.am
 
 sed -i 's|libfb303_so_LDFLAGS = $(SHARED_LDFLAGS)|libfb303_so_LDFLAGS = $(SHARED_LDFLAGS) -lthrift -L../../../lib/cpp/.libs -Wl,--as-needed|g' contrib/fb303/cpp/Makefile.am
+
+# fix broken upstream check for ant version; we enforce this with BuildRequires, so no need to check here
+sed -i 's|ANT_VALID=.*|ANT_VALID=1|' aclocal/ax_javac_and_java.m4
 
 %build
 export PY_PREFIX=%{_prefix}
@@ -401,7 +374,7 @@ make %{?_smp_mflags}
 # build fb303
 (
   cd contrib/fb303
-  chmod 755 bootstrap.sh
+  sed -i '/^[.][/]configure.*/d' bootstrap.sh
   sh bootstrap.sh
   %configure --disable-static --with-java --without-php --libdir=%{_libdir}
   make %{?_smp_mflags}
