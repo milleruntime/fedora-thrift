@@ -468,6 +468,8 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %{_includedir}/thrift
 %exclude %{_includedir}/thrift/fb303
 %{_libdir}/*.so
+%{_libdir}/*.so.0
+%{_libdir}/*.so.0.0.0
 %exclude %{_libdir}/lib*-%{version}.so
 %exclude %{_libdir}/libfb303.so
 %{_libdir}/pkgconfig/thrift-z.pc
@@ -519,7 +521,7 @@ find %{buildroot} -name \*.py -exec grep -q /usr/bin/env {} \; -print | xargs -r
 %files -n python-fb303
 %{python_sitelib}/fb303
 %{python_sitelib}/fb303_scripts
-%{python_sitelib}/%{name}_fb303-%{fb303_version}-py%{py_version}.egg-info
+%{python_sitelib}/%{name}_fb303-%{version}-py%{py_version}.egg-info
 %doc LICENSE NOTICE
 
 %files -n fb303-java -f .mfiles-fb303
