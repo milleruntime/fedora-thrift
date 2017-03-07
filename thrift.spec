@@ -319,6 +319,7 @@ sed -i 's|libfb303_so_LDFLAGS = $(SHARED_LDFLAGS)|libfb303_so_LDFLAGS = $(SHARED
 
 # fix broken upstream check for ant version; we enforce this with BuildRequires, so no need to check here
 sed -i 's|ANT_VALID=.*|ANT_VALID=1|' aclocal/ax_javac_and_java.m4
+sed -i 's|ANT_VALID=.*|ANT_VALID=1|' contrib/fb303/aclocal/ax_javac_and_java.m4
 
 %build
 export PY_PREFIX=%{_prefix}
